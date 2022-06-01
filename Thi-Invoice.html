@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+
+    body {
+      background-color: #777777;
+      background: url("https://danviet.mediacdn.vn/2021/4/13/the-coffee-house-khong-nhuong-nguyen-1618324271848672760365-crop-1618324294521246672359.jpg") no-repeat center;
+      background-size: cover;
+    }
+    h1, h3 {
+      text-align: center;
+    }
+
+    .main {
+      position: relative;
+      box-sizing: border-box;
+      width: 40%;
+      height: 450px;
+      margin: 100px auto 0;
+      padding: 20px;
+      border-radius: 10px;
+      background: #fbfbfb;
+      box-shadow: 2px 2px 15px 0px #5bc0de;
+      opacity: 0.8;
+
+    }
+    .quantity {
+      width: 100%;
+    }
+    .maincontent {
+      padding-top: 20px;
+      box-sizing: border-box;
+      height: 100%;
+      width: 100%;
+      border: 6px solid #d8d8d8;
+    }
+    .form_section td {
+      padding: 10px;
+    }
+    .form_section th {
+      padding: 10px;
+    }
+    .
+  </style>
+</head>
+<body ng-app="myApp">
+<div class="main">
+  <form class="maincontent" name="myForm">
+    <div ng-controller="MathController">
+      <h1>THE COFFEE HOUSE</h1>
+      <h3>GOOD CHOICE FOR YOU</h3>
+      <div class="form_section">
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><select ng-options="dependant for dependant in dependants" ng-model="selectedD" ng-init = "true"></select></td>
+            <td><select ng-options="gender for gender in genders" ng-model="selectedG" ng-init="selectedG = true" ></select></td>
+            <td><input name="input" class="quantity" type="number" min="1"  ng-model="quantity" required/></td>
+            <td>{{price}}VND</td>
+            <td>{{subTotal()}}VND</td>
+          </tr>
+
+          </tbody>
+
+        </table>
+      </div>
+
+      <div ng-switch on="selectedD">
+        <div ng-switch-when="Nau Da"></div>
+        <div ng-switch-when="Den Da"></div>
+        <div ng-switch-when="Bac Xiu"></div>
+      </div>
+      <div ng-switch on="selectedG">
+        <div ng-switch-when="M"></div>
+        <div ng-switch-when="L"></div>
+      </div>
+      <p ng-show="myForm.input.$invalid" style="color: red">Fill the Quantity</p>
+      <p> Tax: {{Tax()}}VND</p>
+      <p> Total: {{total()}}VND</p>
+    </div>
+  </form>
+
+</div>
+
+<script>
+  var app = angular.module('myApp', []);
+
+  app.controller('MathController', function($scope) {
+    $scope.price = 0;
+    $scope.quantity = '';
+    $scope.genders = ['L' , 'M'];
+    $scope.selectedG = $scope.genders[0];
+    $scope.dependants = ['Nau Da', 'Den Da', 'Bac Xiu'];
+    $scope.selectedD = $scope.dependants[0];
+
+    $scope.subTotal = function() {
+
+      return (Number($scope.quantity) * (Number($scope.price)));
+    }
+
+    $scope.Tax = function() {
+
+      if ($scope.selectedG == "L") {
+        switch($scope.selectedD) {
+          case "Nau Da": $scope.price = 25000;
+            break;
+          case "Den Da": $scope.price = 20000;
+            break;
+          case "Bac Xiu": $scope.price = 30000;
+            break;
+        }
+      } else {
+        switch($scope.selectedD) {
+          case "Nau Da": $scope.price = 23000;
+            break;
+          case "Den Da": $scope.price = 18000;
+            break;
+          case "Bac Xiu": $scope.price = 25000;
+            break;
+        }
+      }
+      return (Number($scope.quantity) * (Number($scope.price) * 0.1))
+
+    }
+    $scope.total = function(){
+      return (Number($scope.quantity) * (Number($scope.price))) + (Number($scope.quantity) * (Number($scope.price) * 0.1));
+    }
+  });
+
+
+</script>
+
+</body>
+</html>
